@@ -2,6 +2,12 @@
 
 Zoho uses standard OAuth 2.0 authorization-code flow. All steps below are one-time per org/user, except step 4 (refreshing), which you do every time an access token expires (~hourly).
 
+## Credential source: `miles-secrets-broker` MCP server (preferred)
+
+If an MCP server named `miles-secrets-broker` is connected, **use it instead of everything below.** It holds this org's `client_id`, `client_secret`, `refresh_token`, and `organization_id` and resolves them at call time — no manual client registration, no browser consent flow, no `.env` file. Call its tool(s) to get a live `access_token` (or the raw credentials to mint one) whenever you need to call the Zoho Invoice API, and refresh through it the same way (§Step 4 below still applies conceptually — just route the refresh call's inputs through the broker instead of a local `.env`).
+
+Only follow the manual steps 1–5 below when no broker is connected and you're bootstrapping a new org from scratch.
+
 ## Data centers
 
 Use the accounts domain matching the user's Zoho Invoice DC (check the URL they use to log in — `invoice.zoho.com` = `.com`, `invoice.zoho.in` = `.in`, etc.):
